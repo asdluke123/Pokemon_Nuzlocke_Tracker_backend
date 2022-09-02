@@ -64,3 +64,19 @@ class PokemonMove(models.Model):
     routeId = models.ForeignKey(gameRoute,on_delete=models.CASCADE,related_name='route',default='')
     def __str__(self):
         return self.name
+
+class PokemonOnRoute(models.Model):
+    name = models.CharField(max_length=100, default='')
+    pokemonId = models.ForeignKey(Pokemon,on_delete=models.CASCADE,related_name='routePokemon')
+    routeId = models.ForeignKey(gameRoute,on_delete=models.CASCADE,related_name='pokemonRoute')
+
+    def __str__(self):
+        return self.name
+
+class BoxPokemon(models.Model):
+    name = models.CharField(max_length=100,default='')
+    pokemoId = models.ForeignKey(Pokemon, on_delete=models.CASCADE,related_name='boxPokemomn')
+    runId = models.ForeignKey(Run,on_delete=models.CASCADE,related_name='boxRun')
+
+    def __str__(self):
+        return self.name
