@@ -30,7 +30,7 @@ def get_routes():
       thisRoute.save()
 
 def get_moves():
-  for i in range(131,250):
+  for i in range(251,600):
     url = 'https://pokeapi.co/api/v2/move/%s' % i
     r = requests.get(url)
     res = r.json()
@@ -44,5 +44,5 @@ class Command(BaseCommand):
   def handle(self, *args, **options):
     # get_pokemon()
     # get_routes()
-    # get_moves()
+    get_moves()
     print("completed")
