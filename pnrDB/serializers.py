@@ -10,22 +10,24 @@ class UserSerialzer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('id','name')
-
+class GameSerialzer(serializers.HyperlinkedModelSerializer):
+    userId = UserSerialzer(
+        read_only=True
+    )
+    class Meta:
+        model = Game
+        fields = ('id','name','photo','userId')
 class RunSerialzer(serializers.HyperlinkedModelSerializer):
+    gameId = GameSerialzer(
+        read_only = True
+    )
     userId = UserSerialzer(
         read_only = True  
     )
     class Meta:
         model = Run
-        fields=('id','name','isComplete','deaths','badges','userId')
+        fields=('id','name','isComplete','deaths','badges','userId','gameId')
 
-class GameSerialzer(serializers.HyperlinkedModelSerializer):
-    runId = RunSerialzer(
-        read_only=True
-    )
-    class Meta:
-        model = Game
-        fields = ('id','name','photo','runId')
 
 class MoveSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
