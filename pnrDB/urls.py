@@ -20,7 +20,8 @@ urlpatterns = [
 
     path('run/',views.RunList.as_view(),name='run-list'),
     path('run/<int:pk>', views.RunDetail.as_view(),name='run-detail'),
-
+    path('createrun/',views.CreateRunView.as_view(),name='create-run'),
+    
     path('game/',views.GameList.as_view(), name='game-list'),
     path('game/<int:pk>',views.GameDetail.as_view(),name='game-detail'),
 

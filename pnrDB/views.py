@@ -1,9 +1,10 @@
-from re import M
+from django.http import request
 from django.shortcuts import render
-from rest_framework import generics 
-from .serializers import PokemonMoveSerialzer,PokemonSerializer,BoxPokemonSerailzer,TrainerSerialzer,gameRouteSerialzer,RunSerialzer,UserSerialzer,MoveSerializer,GameSerialzer,PokemonOnRouteSerialzer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import generics, status
+from .serializers import PokemonMoveSerialzer,PokemonSerializer,BoxPokemonSerailzer,TrainerSerialzer,gameRouteSerialzer,RunSerialzer,UserSerialzer,MoveSerializer,GameSerialzer,PokemonOnRouteSerialzer,CreateRunSerialzer
 from .models import Game, Pokemon,PokemonOnRoute,PokemonMove,BoxPokemon,User,Trainer,Move,Run,gameRoute
-from pnrDB import serializers
 # Create your views here.
 
 class PokemonList(generics.ListCreateAPIView):
@@ -47,8 +48,18 @@ class RunList(generics.ListCreateAPIView):
     serializer_class = RunSerialzer
 class RunDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Run.objects.all()
-    serializer_class = RunSerialzer
-
+    serializer_class = RunSerialzer    
+class CreateRunView(APIView):
+    serializer_class = CreateRunSerialzer 
+    def post(self,request,format =None):
+        serialzer = self.serializer_class(data=request.data)
+        if serialzer.is_valid():
+            user = User.objects.filter(pk = serialzer.data['userId']).first()
+            game = Game.objects.filter(pk = serialzer.data['gameId']).first()
+            newName = serialzer.data['name']
+            newRun = Run(name=newName,userId = user, gameId = game)
+            newRun.save()
+            return Response(RunSerialzer(newRun).data,status= status.HTTP_200_OK)
 class GameList(generics.ListCreateAPIView):
     queryset = Game.objects.all()
     serializer_class = GameSerialzer

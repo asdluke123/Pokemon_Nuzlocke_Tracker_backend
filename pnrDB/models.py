@@ -1,4 +1,3 @@
-from pyexpat import model
 from django.db import models
 
 # Create your models here.
@@ -22,8 +21,8 @@ class Run(models.Model):
     userId = models.ForeignKey(User,on_delete=models.CASCADE, related_name='game')
     name = models.CharField(max_length=30)
     isComplete = models.BooleanField(default=False)
-    deaths = models.IntegerField()
-    badges = models.IntegerField()
+    deaths = models.IntegerField(default=0)
+    badges = models.IntegerField(default=0)
     def __str__(self):
         return self.name
 class gameRoute(models.Model):
@@ -50,6 +49,7 @@ class Move(models.Model):
 
 class PokemonMove(models.Model):
     name = models.CharField(max_length=1000,default='TrainerName PokemonName MoveName RouteName')
+    level = models.IntegerField(default=0)
     pokemonId= models.ForeignKey(Pokemon,on_delete=models.CASCADE,related_name='pokemon')
     moveId =  models.ForeignKey(Move,on_delete=models.CASCADE,related_name='move')
     trainerId = models.ForeignKey(Trainer,on_delete=models.CASCADE,related_name='trainer',default='')

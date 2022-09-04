@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'pnrDB',
     'rest_framework',
     'requests',
-    'corsheaders'
+    'corsheaders',
+    'request'
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,6 @@
 import requests
 from django.core.management.base import BaseCommand
-from ...models import gameRoute,Pokemon,Game,Move
+from ...models import gameRoute,Pokemon,Game,Move,PokemonMove,Trainer
 
 
 
@@ -39,10 +39,24 @@ def get_moves():
     )
     move.save()
 
+def seed_trainerTeam():
+  
+  moves = ['Pineco','Rock Blast','Bullet Seed','Fake Out']
+  for move in moves:
+    pokemonMove = PokemonMove(
+      name  = "Youngster Parker",
+      level = 59,
+      pokemonId = Pokemon.objects.filter(name ="togekiss").first(),
+      moveId = Move.objects.filter(name = move).first(),
+      trainerId = Trainer.objects.filter(name ='Youngster Parker').first(),
+      routeId =  gameRoute.objects.filter(pk = 	504).first()
+    )
+    pokemonMove.save()
 
 class Command(BaseCommand):
   def handle(self, *args, **options):
     # get_pokemon()
     # get_routes()
-    get_moves()
+    # get_moves()
+    seed_trainerTeam()
     print("completed")

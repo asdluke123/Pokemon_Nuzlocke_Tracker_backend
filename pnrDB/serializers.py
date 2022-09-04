@@ -1,4 +1,5 @@
 
+from urllib import request
 from rest_framework import serializers
 from .models import Pokemon,Run,Game,PokemonOnRoute,PokemonMove,Trainer,BoxPokemon,gameRoute,Move,User
 
@@ -18,6 +19,7 @@ class GameSerialzer(serializers.HyperlinkedModelSerializer):
         model = Game
         fields = ('id','name','photo','userId')
 class RunSerialzer(serializers.HyperlinkedModelSerializer):
+    
     gameId = GameSerialzer(
         read_only = True
     )
@@ -27,8 +29,10 @@ class RunSerialzer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Run
         fields=('id','name','isComplete','deaths','badges','userId','gameId')
-
-
+class CreateRunSerialzer(serializers.ModelSerializer):
+    class Meta:
+        model = Run
+        fields = ('name','userId','gameId')
 class MoveSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Move
