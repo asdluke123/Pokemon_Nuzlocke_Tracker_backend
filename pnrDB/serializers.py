@@ -33,6 +33,7 @@ class CreateRunSerialzer(serializers.ModelSerializer):
     class Meta:
         model = Run
         fields = ('name','userId','gameId')
+
 class MoveSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Move
@@ -86,3 +87,8 @@ class BoxPokemonSerailzer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = BoxPokemon
         fields = ('id','name','pokemonId','runId')
+
+class CreateBoxPokemonSerailzer(serializers.ModelSerializer):
+    class Meta:
+        model = BoxPokemon
+        fields = ('pokemonId','runId')

@@ -1,9 +1,10 @@
+from urllib.request import Request
 from django.http import request
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, status
-from .serializers import PokemonMoveSerialzer,PokemonSerializer,BoxPokemonSerailzer,TrainerSerialzer,gameRouteSerialzer,RunSerialzer,UserSerialzer,MoveSerializer,GameSerialzer,PokemonOnRouteSerialzer,CreateRunSerialzer
+from .serializers import PokemonMoveSerialzer,PokemonSerializer,BoxPokemonSerailzer,TrainerSerialzer,gameRouteSerialzer,RunSerialzer,UserSerialzer,MoveSerializer,GameSerialzer,PokemonOnRouteSerialzer,CreateRunSerialzer,CreateBoxPokemonSerailzer
 from .models import Game, Pokemon,PokemonOnRoute,PokemonMove,BoxPokemon,User,Trainer,Move,Run,gameRoute
 # Create your views here.
 
@@ -42,7 +43,6 @@ class UserList(generics.ListCreateAPIView):
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerialzer
-
 class RunList(generics.ListCreateAPIView):
     queryset = Run.objects.all()
     serializer_class = RunSerialzer
@@ -72,8 +72,21 @@ class PokemonMoveList(generics.ListCreateAPIView):
     serializer_class = PokemonMoveSerialzer
 
 class BoxPokemonList(generics.ListCreateAPIView):
-    queryset = BoxPokemon.objects.all()
-    serializer_class = BoxPokemonSerailzer
+    def get(self,request,format = None):
+        queryset = (BoxPokemon.objects.filter(runId =request.query_params['route']).first())
+        return Response(BoxPokemonSerailzer(queryset).data,status= status.HTTP_200_OK)
+
+class CreateBoxPokemon(APIView):
+    serializer_class = CreateBoxPokemonSerailzer
+    def post(self,request,format =None):
+        serialzer = self.serializer_class(data=request.data)
+        if serialzer.is_valid():
+            pokemon = Pokemon.objects.filter(pk = serialzer.data['pokemonId']).first()
+            run = Run.objects.filter(pk = serialzer.data['runId']).first()
+            name = pokemon.name
+            newBox = BoxPokemon(name = name,pokemonId = pokemon, runId = run)
+            newBox.save()
+            return Response(BoxPokemonSerailzer(newBox).data,status= status.HTTP_200_OK)
 class PokemonOnRouteList(generics.ListCreateAPIView):
     queryset = PokemonOnRoute.objects.all()
     serializer_class = PokemonOnRouteSerialzer

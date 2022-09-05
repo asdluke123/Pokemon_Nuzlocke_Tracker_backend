@@ -1,12 +1,11 @@
 import requests
 from django.core.management.base import BaseCommand
-from ...models import gameRoute,Pokemon,Game,Move,PokemonMove,Trainer
+from ...models import PokemonOnRoute, gameRoute,Pokemon,Game,Move,PokemonMove,Trainer
 
 
 
 def get_pokemon():
-    for i in range(281,650):
-        url = 'https://pokeapi.co/api/v2/pokemon/%s' % i
+        url = 'https://pokeapi.co/api/v2/pokemon/20' 
         r = requests.get(url)
         response = r.json()
         form = response['forms'][0]
@@ -30,8 +29,7 @@ def get_routes():
       thisRoute.save()
 
 def get_moves():
-  for i in range(251,600):
-    url = 'https://pokeapi.co/api/v2/move/%s' % i
+    url = 'https://pokeapi.co/api/v2/move/250' 
     r = requests.get(url)
     res = r.json()
     move = Move(
@@ -40,23 +38,33 @@ def get_moves():
     move.save()
 
 def seed_trainerTeam():
-  
-  moves = ['Pineco','Rock Blast','Bullet Seed','Fake Out']
+  moves = ['Draco Meteor','Extreme Speed','Flamethrower','Air Slash']
   for move in moves:
     pokemonMove = PokemonMove(
-      name  = "Youngster Parker",
-      level = 59,
-      pokemonId = Pokemon.objects.filter(name ="togekiss").first(),
+      name  = "Team Plasma Ghetsis",
+      level = 100,
+      pokemonId = Pokemon.objects.filter(name ="rayquaza").first(),
       moveId = Move.objects.filter(name = move).first(),
-      trainerId = Trainer.objects.filter(name ='Youngster Parker').first(),
-      routeId =  gameRoute.objects.filter(pk = 	504).first()
+      trainerId = Trainer.objects.filter(name = 'Team Plasma Ghetsis').first(),
+      routeId =  gameRoute.objects.filter(pk = 	529).first()
     )
     pokemonMove.save()
 
+def seed_encounters():
+  pokemons = ['Unown']
+  for pokemon in pokemons:
+    newPokemon = pokemon.replace(pokemon[0],pokemon[0].lower())
+    encounter = PokemonOnRoute(
+      name = "Static Volcarona",
+      pokemonId = Pokemon.objects.filter(name = newPokemon).first(),
+      routeId = gameRoute.objects.filter(pk = 	502).first()
+    )
+    encounter.save()
 class Command(BaseCommand):
   def handle(self, *args, **options):
     # get_pokemon()
     # get_routes()
     # get_moves()
-    seed_trainerTeam()
+    # seed_trainerTeam()
+    seed_encounters()
     print("completed")

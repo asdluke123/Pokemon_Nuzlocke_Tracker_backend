@@ -28,6 +28,7 @@ urlpatterns = [
     path('trainerteam/',views.PokemonMoveList.as_view(), name='trainerteam-list'),
 
     path('boxpokemon/',views.BoxPokemonList.as_view(), name='boxpokemon-list'),
+    path('createbox/',views.CreateBoxPokemon.as_view(), name='createBox-list'),
 
     path('routepokemon/',views.PokemonOnRouteList.as_view(), name='routepokemon-list')
 
