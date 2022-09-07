@@ -1,6 +1,7 @@
 from urllib.request import Request
 from django.http import request
 from django.shortcuts import render
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -68,13 +69,17 @@ class GameDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GameSerialzer
 
 class PokemonMoveList(generics.ListCreateAPIView):
-    queryset = PokemonMove.objects.all()
     serializer_class = PokemonMoveSerialzer
+    def get_queryset(self):
+        route = self.kwargs['routeId']
+        return PokemonMove.objects.filter(routeId = route)
+        
 
 class BoxPokemonList(generics.ListCreateAPIView):
-    def get(self,request,format = None):
-        queryset = (BoxPokemon.objects.filter(runId =request.query_params['route']).first())
-        return Response(BoxPokemonSerailzer(queryset).data,status= status.HTTP_200_OK)
+    serializer_class = BoxPokemonSerailzer
+    def get_queryset(self):
+        runId = self.kwargs['runId']
+        return BoxPokemon.objects.filter(runId = runId)
 
 class CreateBoxPokemon(APIView):
     serializer_class = CreateBoxPokemonSerailzer
@@ -88,5 +93,7 @@ class CreateBoxPokemon(APIView):
             newBox.save()
             return Response(BoxPokemonSerailzer(newBox).data,status= status.HTTP_200_OK)
 class PokemonOnRouteList(generics.ListCreateAPIView):
-    queryset = PokemonOnRoute.objects.all()
     serializer_class = PokemonOnRouteSerialzer
+    def get_queryset(self):
+        route = self.kwargs['routeId']
+        return PokemonOnRoute.objects.filter(routeId = route)

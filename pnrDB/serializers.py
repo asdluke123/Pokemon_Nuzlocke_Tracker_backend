@@ -75,7 +75,7 @@ class PokemonMoveSerialzer(serializers.HyperlinkedModelSerializer):
         )
         class Meta:
             model = PokemonMove
-            fields = ('id','name','pokemonId','moveId','trainerId','routeId')
+            fields = ('id','name','pokemonId','moveId','trainerId','routeId','level')
 
 class BoxPokemonSerailzer(serializers.HyperlinkedModelSerializer):
     pokemonId = PokemonSerializer(
@@ -92,3 +92,4 @@ class CreateBoxPokemonSerailzer(serializers.ModelSerializer):
     class Meta:
         model = BoxPokemon
         fields = ('pokemonId','runId')
+    

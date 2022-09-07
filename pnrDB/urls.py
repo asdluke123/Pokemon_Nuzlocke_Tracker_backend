@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,re_path
 from . import views
 from rest_framework.routers import DefaultRouter
 
@@ -25,11 +25,11 @@ urlpatterns = [
     path('game/',views.GameList.as_view(), name='game-list'),
     path('game/<int:pk>',views.GameDetail.as_view(),name='game-detail'),
 
-    path('trainerteam/',views.PokemonMoveList.as_view(), name='trainerteam-list'),
+    path('trainerteam/<int:routeId>',views.PokemonMoveList.as_view(), name='trainerteam-list'),
 
-    path('boxpokemon/',views.BoxPokemonList.as_view(), name='boxpokemon-list'),
+    path('boxpokemon/<int:runId>',views.BoxPokemonList.as_view(), name='boxpokemon-list'),
     path('createbox/',views.CreateBoxPokemon.as_view(), name='createBox-list'),
 
-    path('routepokemon/',views.PokemonOnRouteList.as_view(), name='routepokemon-list')
+    path('routepokemon/<int:routeId>',views.PokemonOnRouteList.as_view(), name='routepokemon-list')
 
 ]
