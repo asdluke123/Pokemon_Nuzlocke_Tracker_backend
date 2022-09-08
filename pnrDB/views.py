@@ -1,3 +1,4 @@
+from http import server
 from tabnanny import check
 from django.shortcuts import render
 from django.contrib.auth.hashers import make_password,check_password
@@ -51,7 +52,7 @@ class CreateUser(APIView):
     def post(self,request,format =None):
         serialzer = self.serializer_class(data=request.data)
         if serialzer.is_valid():
-            password = serialzer.data['password']
+            password = make_password(serialzer.data['password'])
             newUser = User(name = serialzer.data['name'],password = password,eMail = serialzer.data['eMail'])
             newUser.save()
             return Response(RunSerialzer(newUser).data,status= status.HTTP_200_OK)
