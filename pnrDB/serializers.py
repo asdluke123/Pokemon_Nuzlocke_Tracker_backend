@@ -10,7 +10,7 @@ class PokemonSerializer(serializers.HyperlinkedModelSerializer):
 class UserSerialzer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id','name')
+        fields = ('id','name','eMail','password')
 class GameSerialzer(serializers.HyperlinkedModelSerializer):
     userId = UserSerialzer(
         read_only=True

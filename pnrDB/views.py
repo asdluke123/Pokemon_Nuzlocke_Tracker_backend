@@ -1,12 +1,14 @@
-from urllib.request import Request
-from django.http import request
+from tabnanny import check
 from django.shortcuts import render
+from django.contrib.auth.hashers import make_password,check_password
 
+from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, status
 from .serializers import PokemonMoveSerialzer,PokemonSerializer,BoxPokemonSerailzer,TrainerSerialzer,gameRouteSerialzer,RunSerialzer,UserSerialzer,MoveSerializer,GameSerialzer,PokemonOnRouteSerialzer,CreateRunSerialzer,CreateBoxPokemonSerailzer
 from .models import Game, Pokemon,PokemonOnRoute,PokemonMove,BoxPokemon,User,Trainer,Move,Run,gameRoute
+from pnrDB import serializers
 # Create your views here.
 
 class PokemonList(generics.ListCreateAPIView):
@@ -44,6 +46,23 @@ class UserList(generics.ListCreateAPIView):
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerialzer
+class CreateUser(APIView):
+    serializer_class = UserSerialzer
+    def post(self,request,format =None):
+        serialzer = self.serializer_class(data=request.data)
+        if serialzer.is_valid():
+            password = serialzer.data['password']
+            newUser = User(name = serialzer.data['name'],password = password,eMail = serialzer.data['eMail'])
+            newUser.save()
+            return Response(RunSerialzer(newUser).data,status= status.HTTP_200_OK)
+class LogInUser(generics.ListCreateAPIView):
+    serializer_class = UserSerialzer
+    def get_queryset(self):
+        password = self.kwargs['password']
+        email = self.kwargs['email']
+        user = User.objects.get(eMail = email)
+        if check_password(password,user.password):
+            return {user}
 class RunList(generics.ListCreateAPIView):
     queryset = Run.objects.all()
     serializer_class = RunSerialzer

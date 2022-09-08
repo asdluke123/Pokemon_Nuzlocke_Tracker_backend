@@ -17,6 +17,8 @@ urlpatterns = [
 
     path('user/',views.UserList.as_view(),name='user-list'),
     path('user/<int:pk>',views.UserDetail.as_view(), name='user-detail'),
+    path('createuser/',views.CreateUser.as_view(), name='create-user'),
+    path('login/<str:password>/<str:email>',views.LogInUser.as_view(), name='log-user'),
 
     path('run/',views.RunList.as_view(),name='run-list'),
     path('run/<int:pk>', views.RunDetail.as_view(),name='run-detail'),

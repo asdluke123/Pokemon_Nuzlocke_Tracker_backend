@@ -1,11 +1,10 @@
-import email
 from django.db import models
 
 # Create your models here.
 class User(models.Model):
     name = models.CharField(max_length=30)
-    email = models.EmailField(default= '1@gmail.com')
-    password = models.CharField(max_length=20,default='1')
+    eMail = models.CharField(max_length = 100,default= '1@gmail.com')
+    password = models.CharField(max_length=100,default='1')
     def __str__(self):
         return self.name
 class Game(models.Model):
