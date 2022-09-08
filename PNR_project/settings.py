@@ -77,6 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'PNR_project.wsgi.application'
 
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
