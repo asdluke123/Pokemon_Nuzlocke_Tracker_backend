@@ -12,10 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 # At the top of the settings.py file add:
 
 import os
-import dj_database_url
 
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure-thisismykey'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if os.getenv('MODE') == 'dev' else False
+DEBUG = True if str(os.getenv('MODE')) == 'dev' else False
 
 ALLOWED_HOSTS = ['*']
 
@@ -45,12 +43,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'requests',
     'corsheaders',
-    'request'
+    'request',
+    'import_export'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -86,7 +84,14 @@ WSGI_APPLICATION = 'PNR_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
-'default': dj_database_url.config(conn_max_age=600)
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'pnrDB', 
+        'USER': 'postgres', 
+        'PASSWORD': 'Campbell1!',
+        'HOST': '127.0.0.1', 
+        'PORT': '5432',
+    }
 }
     
 
@@ -131,4 +136,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_ROOT= os.path.join(BASE_DIR, "static/")

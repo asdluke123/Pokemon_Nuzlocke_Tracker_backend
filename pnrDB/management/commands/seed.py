@@ -1,11 +1,17 @@
 import requests
 from django.core.management.base import BaseCommand
 from ...models import PokemonOnRoute, gameRoute,Pokemon,Game,Move,PokemonMove,Trainer
+import json
 
+json_data = open('pnrDB\management\commands\data.json') 
+data1 = json.load(json_data)
+data2 = json.dumps(data1)
+json_data.close()
 
 
 def get_pokemon():
-        url = 'https://pokeapi.co/api/v2/pokemon/20' 
+      for i in range(1,600):
+        url = 'https://pokeapi.co/api/v2/pokemon/%i' % i 
         r = requests.get(url)
         response = r.json()
         form = response['forms'][0]
@@ -29,7 +35,8 @@ def get_routes():
       thisRoute.save()
 
 def get_moves():
-    url = 'https://pokeapi.co/api/v2/move/250' 
+   for i in range(1,630):
+    url = 'https://pokeapi.co/api/v2/move/i' % i 
     r = requests.get(url)
     res = r.json()
     move = Move(
@@ -38,17 +45,16 @@ def get_moves():
     move.save()
 
 def seed_trainerTeam():
-  moves = ['Draco Meteor','Extreme Speed','Flamethrower','Air Slash']
-  for move in moves:
-    pokemonMove = PokemonMove(
-      name  = "Team Plasma Ghetsis",
-      level = 100,
-      pokemonId = Pokemon.objects.filter(name ="rayquaza").first(),
-      moveId = Move.objects.filter(name = move).first(),
-      trainerId = Trainer.objects.filter(name = 'Team Plasma Ghetsis').first(),
-      routeId =  gameRoute.objects.filter(pk = 	529).first()
-    )
-    pokemonMove.save()
+    for data in data1:
+      pokemonMove = PokemonMove(
+      name  = data['name'],
+      level = data['level'],
+      pokemonId = Pokemon.objects.filter(name =data['pokemonId']['name']).first(),
+      moveId = Move.objects.filter(name = data['moveId']['name']).first(),
+      trainerId = Trainer.objects.filter(name = data['trainerId']['name']).first(),
+      routeId =  gameRoute.objects.filter(name = data['routeId']['name']).first()
+      )
+      print(pokemonMove)
 
 def seed_encounters():
   pokemons = ['Unown']
@@ -62,9 +68,9 @@ def seed_encounters():
     encounter.save()
 class Command(BaseCommand):
   def handle(self, *args, **options):
-    # get_pokemon()
-    # get_routes()
-    # get_moves()
+    get_pokemon()
+    get_routes()
+    get_moves()
     # seed_trainerTeam()
-    seed_encounters()
+    # seed_encounters()
     print("completed")

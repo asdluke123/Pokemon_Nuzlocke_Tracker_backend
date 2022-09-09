@@ -28,7 +28,7 @@ urlpatterns = [
     path('game/<int:pk>',views.GameDetail.as_view(),name='game-detail'),
 
     path('trainerteam/<int:routeId>',views.PokemonMoveList.as_view(), name='trainerteam-list'),
-
+    path('trainerteam/',views.PokemonTrainerList.as_view(),name ='temp'),
     path('boxpokemon/<int:runId>',views.BoxPokemonList.as_view(), name='boxpokemon-list'),
     path('createbox/',views.CreateBoxPokemon.as_view(), name='createBox-list'),
 

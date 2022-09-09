@@ -100,7 +100,9 @@ class BoxPokemonList(generics.ListCreateAPIView):
     def get_queryset(self):
         runId = self.kwargs['runId']
         return BoxPokemon.objects.filter(runId = runId)
-
+class PokemonTrainerList(generics.ListCreateAPIView):      
+    queryset = PokemonMove.objects.all()
+    serializer_class = PokemonMoveSerialzer
 class CreateBoxPokemon(APIView):
     serializer_class = CreateBoxPokemonSerailzer
     def post(self,request,format =None):
